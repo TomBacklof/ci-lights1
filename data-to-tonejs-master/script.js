@@ -1,17 +1,18 @@
-function postColor(colors, id) {
-    fetch('https://ci-lights.azurewebsites.net/setcolor', {
-            method: 'post',
+function postColor(color) {
+	for (i=0; i < 24; i++) { 
+		fetch('http://192.168.0.157:8000/setcolor', {
+		   method: 'post',
             body: JSON.stringify({
-				id: "1",
-                color: colors,
-                session: 'whatever',
+				id: `${i}`,
+                color: [parseInt(Math.random()*255), 80, 120],
+                session: 'main',
             }),
             headers: {
                 'Content-Type': 'application/json',
             },
         }).then(res => console.log(res));
 }
-
+ }
 
 // P5JS:
 
@@ -367,6 +368,7 @@ var randomOne = 'C4';
 
 	
 //erlang
+var countColorOne = 0; var countColorTwo = 0;
 var treeCount = 0; var treeCountTwo = 0;
 var kickCount = 0; 
 var pluckCountOne = 0; var pluckCountTwo = 0; var pluckCountThree = 0;
@@ -377,6 +379,7 @@ var scala = 0; var php = 0; var cpp = 0; var elixir = 0; var go = 0;
 var minimal = 0; var sh = 0; var julia = 0;	var objectiveC = 0; var rust = 0;
 var r = 0; var bash = 0; var cplusplus = 0; var csharp = 0;
 
+var canAddPostOne = true; var canAddPostTwo = true;
 var canAddTree = true; var canAddTreeTwo = true;
 var canAddKickDrum = true;
 var canAddPluckOne = true; var canAddPluckTwo = true; var canAddPluckThree = true; 
@@ -602,7 +605,35 @@ var onmessage = function (e) {
             canAddKickDrum = true;
         }, 500);
     
-        postColor([255, 0, 0])
+        
+	}
+	//////////////////////////////////////////
+	if (canAddPostOne) {
+		if (data.data.config.os === 'osx') {
+			countColorOne += 1;
+		}
+	}
+	if (countColorOne > 1) {
+        postColor([parseInt(Math.random()*255), 80, 120]);
+        countColorOne = 0;
+        canAddPostOne = false;
+        setTimeout(function() {
+            canAddPostOne = true;
+        }, 1000);
+	}
+	//////////////////////////////////////////
+	if (canAddPostTwo) {
+		if (data.data.config.os === 'linux') {
+			countColorTwo += 1;
+		}
+	}
+	if (countColorTwo > 1) {
+        postColor([0, 0, 0]);
+        countColorTwo = 0;
+        canAddPostTwo = false;
+        setTimeout(function() {
+            canAddPostTwo = true;
+        }, 1000);
 	}
 	//////////////////////////////////////////
 	if (canAddTree) {
